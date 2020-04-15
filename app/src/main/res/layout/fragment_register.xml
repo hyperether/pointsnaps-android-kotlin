@@ -101,7 +101,7 @@
         android:id="@+id/signupBtn"
         style="@style/MainButton"
         android:layout_width="0dp"
-        android:layout_height="32dp"
+        android:layout_height="45dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/button_rounded"
         android:text="@string/sign_up"
