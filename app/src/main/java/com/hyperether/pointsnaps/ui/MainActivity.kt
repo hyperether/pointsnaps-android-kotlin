@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         //todo check if user is logged in
         findNavController(R.id.nav_host_fragment).navigate(R.id.goToMainNav)
-        findNavController(R.id.nav_host_fragment).navigate(R.id.goToAuthNav)
+//        findNavController(R.id.nav_host_fragment).navigate(R.id.goToAuthNav)
     }
 
 }

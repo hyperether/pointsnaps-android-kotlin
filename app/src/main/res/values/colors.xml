@@ -7,9 +7,13 @@
     <color name="button_main">#3fd2c7</color>
     <color name="button_main_txt">#ffffff</color>
     <color name="button_txt">#3fd2c7</color>
+    <color name="button_white">#ffffff</color>
 
     <color name="background">#f9f9f9</color>
     <color name="main_txt">#333333</color>
 
     <color name="edit_text_line">#f9f9f9</color>
+    <color name="text_black_white">#333333</color>
+    <color name="camera_txt_color">#b4b4b4</color>
+
 </resources>
