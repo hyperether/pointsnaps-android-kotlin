@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigationMain">
+
+    <action android:id="@+id/goToMainNav"
+        app:destination="@+id/navigationMain"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true"/>
+
+    <action android:id="@+id/goToAuthNav"
+        app:destination="@+id/navigationAuth"
+        app:popUpTo="@id/nav_graph"
+        app:popUpToInclusive="true"/>
+
+    <navigation
+        android:id="@+id/navigationAuth"
+        app:startDestination="@id/loginFragment">
+
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.hyperether.pointsnaps.ui.auth.LoginFragment"
+            android:label="fragment_login"
+            tools:layout="@layout/fragment_login" >
+            <action
+                android:id="@+id/action_loginFragment_to_registerFragment"
+                app:destination="@id/registerFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/registerFragment"
+            android:name="com.hyperether.pointsnaps.ui.auth.RegisterFragment"
+            android:label="fragment_register"
+            tools:layout="@layout/fragment_register" >
+            <action
+                android:id="@+id/action_registerFragment_to_loginFragment"
+                app:destination="@id/loginFragment"
+                app:popUpTo="@id/navigationAuth"
+                app:popUpToInclusive="true"/>
+        </fragment>
+    </navigation>
+
+    <navigation
+        android:id="@+id/navigationMain"
+        app:startDestination="@id/mainFragment" >
+        <fragment
+            android:id="@+id/mainFragment"
+            android:name="com.hyperether.pointsnaps.ui.main.MainFragment"
+            android:label="main_fragment"
+            tools:layout="@layout/main_fragment" />
+    </navigation>
+</navigation>
