@@ -15,5 +15,5 @@
     <color name="edit_text_line">#f9f9f9</color>
     <color name="text_black_white">#333333</color>
     <color name="camera_txt_color">#b4b4b4</color>
-
+    <color name="your_location">#333333</color>
 </resources>

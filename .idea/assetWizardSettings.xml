@@ -11,11 +11,26 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
+                        <option name="children">
+                          <map>
+                            <entry key="clipartAsset">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="url" value="jar:file:/home/nikola/android-studio-ide-191.6010548-linux/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_clear_black_24dp.xml" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_camera_btn_white" />
-                            <entry key="sourceFile" value="$PROJECT_DIR$/../Downloads/camera_btn.svg" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_decline" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/../Downloads/accept_rectangle.svg" />
                           </map>
                         </option>
                       </PersistentState>
