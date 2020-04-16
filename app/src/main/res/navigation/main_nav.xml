@@ -26,7 +26,11 @@
             tools:layout="@layout/fragment_login" >
             <action
                 android:id="@+id/action_loginFragment_to_registerFragment"
-                app:destination="@id/registerFragment" />
+                app:destination="@id/registerFragment"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out"/>
         </fragment>
 
         <fragment
@@ -38,7 +42,11 @@
                 android:id="@+id/action_registerFragment_to_loginFragment"
                 app:destination="@id/loginFragment"
                 app:popUpTo="@id/navigationAuth"
-                app:popUpToInclusive="true"/>
+                app:popUpToInclusive="true"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out"/>
         </fragment>
     </navigation>
 
@@ -49,6 +57,51 @@
             android:id="@+id/mainFragment"
             android:name="com.hyperether.pointsnaps.ui.main.MainFragment"
             android:label="main_fragment"
-            tools:layout="@layout/main_fragment" />
+            tools:layout="@layout/main_fragment">
+            <action
+                android:id="@+id/action_main_to_location"
+                app:destination="@id/locationFragment"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out" />
+            <action
+                android:id="@+id/action_main_to_description"
+                app:destination="@id/descriptionFragment"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out"/>
+        </fragment>
+        <fragment
+            android:id="@+id/locationFragment"
+            android:name="com.hyperether.pointsnaps.ui.main.LocationFragment"
+            android:label="fragment_location"
+            tools:layout="@layout/fragment_location">
+            <action
+                android:id="@+id/action_location_to_main"
+                app:destination="@id/mainFragment"
+                app:popUpTo="@id/navigationMain"
+                app:popUpToInclusive="true"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out"/>
+        </fragment>
+        <fragment
+            android:id="@+id/descriptionFragment"
+            android:name="com.hyperether.pointsnaps.ui.main.DescriptionFragment"
+            android:label="fragment_description"
+            tools:layout="@layout/fragment_description">
+            <action
+                android:id="@+id/action_description_to_main"
+                app:destination="@id/mainFragment"
+                app:popUpTo="@id/navigationMain"
+                app:popUpToInclusive="true"
+                app:enterAnim="@android:anim/slide_in_left"
+                app:exitAnim="@android:anim/slide_out_right"
+                app:popEnterAnim="@android:anim/fade_in"
+                app:popExitAnim="@android:anim/fade_out"/>
+        </fragment>
     </navigation>
 </navigation>
