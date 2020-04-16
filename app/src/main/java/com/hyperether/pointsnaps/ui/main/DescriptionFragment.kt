@@ -21,4 +21,6 @@ class DescriptionFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_description, container, false)
     }
 
+    //todo make focus on edit text
+
 }
