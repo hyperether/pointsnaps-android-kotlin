@@ -6,15 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.R
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
+    private var description = ""
 
     private lateinit var viewModel: MainViewModel
 
@@ -25,8 +26,10 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
+
+        setupObservers()
 
         buttonLoc.setOnClickListener { v->
             findNavController().navigate(R.id.action_main_to_location)
@@ -35,6 +38,16 @@ class MainFragment : Fragment() {
         buttonDes.setOnClickListener { v->
             findNavController().navigate(R.id.action_main_to_description)
         }
+
+        mainButton.setOnClickListener {
+            Toast.makeText(context, description, Toast.LENGTH_LONG).show()
+        }
     }
 
+
+    fun setupObservers() {
+        viewModel.getDescriptionLiveData().observe(viewLifecycleOwner, Observer {
+            description = it
+        })
+    }
 }

@@ -126,7 +126,7 @@
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:background="@drawable/button_rounded_white"
-        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintBottom_toTopOf="@id/mainButton"
         android:layout_marginBottom="30dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4">
@@ -155,7 +155,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/button"
+        android:id="@+id/mainButton"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:background="@drawable/button_rounded"
