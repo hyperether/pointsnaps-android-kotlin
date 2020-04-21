@@ -14,6 +14,8 @@
     <string name="select_photo">Select photo</string>
     <string name="your_location">Your location:</string>
     <string name="add_description">Add description</string>
+    <string name="add_location">Add location</string>
     <string name="take_a_photo">Take a photo</string>
     <string name="upload_from_gallery">Upload from Gallery</string>
+    <string name="upload">Upload</string>
 </resources>

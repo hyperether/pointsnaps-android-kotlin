@@ -7,3 +7,5 @@
 /build
 /captures
 .externalNativeBuild
+.aar
+src/main/res/values/google_maps_api.xml

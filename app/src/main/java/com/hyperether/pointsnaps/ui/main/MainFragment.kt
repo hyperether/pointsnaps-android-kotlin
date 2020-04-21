@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -77,6 +78,14 @@ class MainFragment : Fragment() {
     fun setupObservers() {
         viewModel.getDescriptionLiveData().observe(viewLifecycleOwner, Observer {
             description = it
+        })
+
+        viewModel.successUpload.observe(viewLifecycleOwner, Observer {
+            //todo clear views
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
     }
 
@@ -187,5 +196,34 @@ class MainFragment : Fragment() {
                     file = File(data.data!!.path!!)
                 }
         }
+    }
+
+    fun buttonChecker(){
+        if (!this::file.isInitialized) {
+            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_camera_btn))
+            buttonTxt.text = getString(R.string.take_a_photo)
+            mainButton.setOnClickListener {
+                openFileChooser()
+            }
+        } else if (false) {
+            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_location_btn))
+            buttonTxt.text = getString(R.string.add_location)
+            mainButton.setOnClickListener {
+                findNavController().navigate(R.id.action_main_to_location)
+            }
+        } else if (description.isEmpty()) {
+            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_description_btn))
+            buttonTxt.text = getString(R.string.add_description)
+            mainButton.setOnClickListener {
+                findNavController().navigate(R.id.action_main_to_description)
+            }
+        } else {
+            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_upload_btn))
+            buttonTxt.text = getString(R.string.upload)
+            mainButton.setOnClickListener {
+                viewModel.upload(file, file.name, file.extension, "address",12.2, 12.1, description)
+            }
+        }
+
     }
 }
