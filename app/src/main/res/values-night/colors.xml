@@ -16,4 +16,7 @@
     <color name="text_black_white">#ffffff</color>
     <color name="camera_txt_color">#686e9b</color>
     <color name="your_location">#686e9b</color>
+
+    <color name="splitter">#181c3a</color>
+    <color name="dialog_background">#090d28</color>
 </resources>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: :pointsnapssdkkotlin-debug:@aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/d8eb6bc8f3c26782a994f9ea04b144ba/jetified-pointsnapssdkkotlin-debug/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../.gradle/caches/transforms-2/files-2.1/d8eb6bc8f3c26782a994f9ea04b144ba/jetified-pointsnapssdkkotlin-debug/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
