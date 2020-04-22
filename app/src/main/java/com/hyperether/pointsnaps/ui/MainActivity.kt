@@ -17,8 +17,8 @@ class MainActivity : AppCompatActivity() {
             this.context = this@MainActivity.applicationContext
         }
         //todo check if user is logged in
-        findNavController(R.id.nav_host_fragment).navigate(R.id.goToMainNav)
-//        findNavController(R.id.nav_host_fragment).navigate(R.id.goToAuthNav)
+//        findNavController(R.id.nav_host_fragment).navigate(R.id.goToMainNav)
+        findNavController(R.id.nav_host_fragment).navigate(R.id.goToAuthNav)
     }
 
 }

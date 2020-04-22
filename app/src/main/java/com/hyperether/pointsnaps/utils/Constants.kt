@@ -5,4 +5,5 @@ object Constants {
     const val OPEN_CAMERA_REQUEST = 0
     const val OPEN_FILES_PERMISSION = 1
     const val OPEN_FILES_REQUEST = 1
+    const val LOCATION_PERMISSION = 2
 }

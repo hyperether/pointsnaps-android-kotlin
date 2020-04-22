@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="@string/your_location"
         android:textColor="@color/button_main"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/guideline6"

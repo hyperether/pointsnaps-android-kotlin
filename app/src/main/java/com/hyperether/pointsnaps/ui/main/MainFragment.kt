@@ -6,17 +6,14 @@ import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -25,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.hyperether.pointsnaps.Location
 import com.hyperether.pointsnaps.R
 import com.hyperether.pointsnaps.utils.Constants
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -54,7 +52,7 @@ class MainFragment : Fragment() {
         setupObservers()
 
         buttonLoc.setOnClickListener { v ->
-            findNavController().navigate(R.id.action_main_to_location)
+            checkLocationPermission()
         }
 
         buttonDes.setOnClickListener { v ->
@@ -87,6 +85,15 @@ class MainFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
+
+        viewModel.location.observe(viewLifecycleOwner, Observer {
+            location = it
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        buttonChecker()
     }
 
     fun openFileChooser() {
@@ -158,6 +165,9 @@ class MainFragment : Fragment() {
             Constants.OPEN_FILES_PERMISSION ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     openFiles()
+            Constants.LOCATION_PERMISSION ->
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    findNavController().navigate(R.id.action_main_to_location)
         }
     }
 
@@ -198,14 +208,14 @@ class MainFragment : Fragment() {
         }
     }
 
-    fun buttonChecker(){
+    fun buttonChecker() {
         if (!this::file.isInitialized) {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_camera_btn))
             buttonTxt.text = getString(R.string.take_a_photo)
             mainButton.setOnClickListener {
                 openFileChooser()
             }
-        } else if (false) {
+        } else if (!this::location.isInitialized) {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_location_btn))
             buttonTxt.text = getString(R.string.add_location)
             mainButton.setOnClickListener {
@@ -221,9 +231,42 @@ class MainFragment : Fragment() {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_upload_btn))
             buttonTxt.text = getString(R.string.upload)
             mainButton.setOnClickListener {
-                viewModel.upload(file, file.name, file.extension, "address",12.2, 12.1, description)
+                viewModel.upload(
+                    file,
+                    file.name,
+                    file.extension,
+                    location.address,
+                    location.lon,
+                    location.lat,
+                    description
+                )
             }
         }
 
+    }
+
+    private fun checkLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(
+                    context!!,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_DENIED ||
+                ActivityCompat.checkSelfPermission(
+                    context!!,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ), Constants.LOCATION_PERMISSION
+                )
+            } else {
+                findNavController().navigate(R.id.action_main_to_location)
+            }
+        } else {
+            findNavController().navigate(R.id.action_main_to_location)
+        }
     }
 }

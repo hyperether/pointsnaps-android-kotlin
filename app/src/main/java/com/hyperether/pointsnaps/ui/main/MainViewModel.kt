@@ -3,6 +3,7 @@ package com.hyperether.pointsnaps.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hyperether.pointsnaps.Location
 import com.hyperether.pointsnapssdk.PointSnapsSDK
 import kotlinx.coroutines.launch
 import java.io.File
@@ -11,6 +12,7 @@ class MainViewModel : ViewModel() {
     var descriptionData = MutableLiveData<String>()
     var error = MutableLiveData<String>()
     var successUpload = MutableLiveData<Boolean>()
+    var location = MutableLiveData<Location>()
 
     fun setDescription(description: String){
         descriptionData.postValue(description)
@@ -29,5 +31,9 @@ class MainViewModel : ViewModel() {
                 error.postValue(response.message)
             }
         }
+    }
+
+    fun setAddress(location: Location) {
+        this.location.postValue(location)
     }
 }
