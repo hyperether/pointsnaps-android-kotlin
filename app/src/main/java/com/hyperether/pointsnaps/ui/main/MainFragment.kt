@@ -3,7 +3,6 @@ package com.hyperether.pointsnaps.ui.main
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -18,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.Location
 import com.hyperether.pointsnaps.R
 import com.hyperether.pointsnaps.utils.Constants
+import com.hyperether.pointsnaps.utils.Utils
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
@@ -33,7 +34,6 @@ class MainFragment : Fragment() {
     private var description = ""
     private lateinit var file: File
     private lateinit var location: Location
-    private lateinit var imageuri: Uri
 
     private lateinit var viewModel: MainViewModel
 
@@ -172,17 +172,20 @@ class MainFragment : Fragment() {
     }
 
     private fun openCamera() {
-        val values = ContentValues()
-        values.put(MediaStore.Images.Media.TITLE, "New Picture")
-        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-        imageuri = activity!!.contentResolver.insert(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            values
-        )!!
-        //camera intent
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri)
-        startActivityForResult(cameraIntent, Constants.OPEN_CAMERA_REQUEST)
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
+            intent.resolveActivity(context!!.packageManager)?.also {
+                file = Utils.createImageFile(context!!)
+                file?.also {
+                    val uri = FileProvider.getUriForFile(
+                        context!!,
+                        "com.hyperether.pointsnaps.fileprovider",
+                        it
+                    )
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    startActivityForResult(intent, Constants.OPEN_CAMERA_REQUEST)
+                }
+            }
+        }
     }
 
     private fun openFiles() {
@@ -195,14 +198,14 @@ class MainFragment : Fragment() {
         when (requestCode) {
             Constants.OPEN_CAMERA_REQUEST ->
                 if (resultCode == Activity.RESULT_OK) {
-                    roundedImage.setImageURI(imageuri)
+                    roundedImage.setImageURI(Uri.parse(file.absolutePath))
                     roundedImageLayout.visibility = VISIBLE
-                    file = File(imageuri.path!!)
                 }
             Constants.OPEN_FILES_REQUEST ->
                 if (resultCode == Activity.RESULT_OK) {
                     roundedImage.setImageURI(data!!.data)
                     roundedImageLayout.visibility = VISIBLE
+                    //todo provide file
                     file = File(data.data!!.path!!)
                 }
         }
