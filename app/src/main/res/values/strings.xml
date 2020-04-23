@@ -25,4 +25,5 @@
     <string name="dark">Dark</string>
     <string name="light">Light</string>
     <string name="company_code">Company code</string>
+    <string name="full_name">Full name</string>
 </resources>

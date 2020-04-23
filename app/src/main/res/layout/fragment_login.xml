@@ -63,7 +63,7 @@
         app:layout_constraintBottom_toTopOf="@+id/passwordLayout"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        android:hint="@string/username">
+        android:hint="@string/email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/usernameET"

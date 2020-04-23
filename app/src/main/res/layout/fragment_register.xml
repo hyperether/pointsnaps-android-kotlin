@@ -62,13 +62,13 @@
         app:layout_constraintBottom_toTopOf="@+id/emailLayout"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        android:hint="@string/username">
+        android:hint="@string/full_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/usernameET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="textPersonName"
             android:drawableEnd="@drawable/ic_username_icon"/>
     </com.google.android.material.textfield.TextInputLayout>
 

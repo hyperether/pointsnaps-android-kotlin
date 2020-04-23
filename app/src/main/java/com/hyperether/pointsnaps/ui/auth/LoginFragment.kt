@@ -29,7 +29,7 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!).get(AuthViewModel::class.java)
         toolbar.setTitle(getString(R.string.sign_in))
         toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
         toolbar.setNavigationOnClickListener {
@@ -56,6 +56,11 @@ class LoginFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        viewModel.registerUser.observe(viewLifecycleOwner, Observer {
+            usernameET.setText(it.email)
+            passwordET.setText(it.password)
         })
     }
 
