@@ -13,13 +13,14 @@ class MainViewModel : ViewModel() {
     var error = MutableLiveData<String>()
     var successUpload = MutableLiveData<Boolean>()
     var location = MutableLiveData<Location>()
+    var file = MutableLiveData<File>()
 
     fun setDescription(description: String){
         descriptionData.postValue(description)
     }
 
-    fun getDescriptionLiveData(): MutableLiveData<String> {
-        return descriptionData
+    fun setFile(file: File) {
+        this.file.postValue(file)
     }
 
     fun upload(file: File, fileName: String, ext: String, address:String, lon: Double, lat: Double, description: String) {
@@ -33,7 +34,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun setAddress(location: Location) {
+    fun setLocation(location: Location) {
         this.location.postValue(location)
     }
 }

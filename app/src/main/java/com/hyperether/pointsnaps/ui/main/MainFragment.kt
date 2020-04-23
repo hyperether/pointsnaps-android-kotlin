@@ -28,7 +28,6 @@ import com.hyperether.pointsnaps.utils.Constants
 import com.hyperether.pointsnaps.utils.Utils
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
-import java.io.InputStream
 
 class MainFragment : Fragment() {
 
@@ -75,7 +74,13 @@ class MainFragment : Fragment() {
 
 
     fun setupObservers() {
-        viewModel.getDescriptionLiveData().observe(viewLifecycleOwner, Observer {
+        viewModel.file.observe(viewLifecycleOwner, Observer {
+            file = it
+            roundedImage.setImageURI(Uri.parse(file.absolutePath))
+            roundedImageLayout.visibility = VISIBLE
+        })
+
+        viewModel.descriptionData.observe(viewLifecycleOwner, Observer {
             description = it
         })
 
@@ -199,14 +204,12 @@ class MainFragment : Fragment() {
         when (requestCode) {
             Constants.OPEN_CAMERA_REQUEST ->
                 if (resultCode == Activity.RESULT_OK) {
-                    roundedImage.setImageURI(Uri.parse(file.absolutePath))
-                    roundedImageLayout.visibility = VISIBLE
+                    viewModel.setFile(file)
                 }
             Constants.OPEN_FILES_REQUEST ->
                 if (resultCode == Activity.RESULT_OK) {
-                    roundedImage.setImageURI(data!!.data)
-                    roundedImageLayout.visibility = VISIBLE
-                    file = Utils.getFileFromUri(data.data!!, context!!)
+                    file = Utils.getFileFromUri(data?.data!!, context!!)
+                    viewModel.setFile(file)
                 }
         }
     }

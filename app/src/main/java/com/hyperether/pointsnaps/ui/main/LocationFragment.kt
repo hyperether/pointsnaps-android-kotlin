@@ -1,7 +1,6 @@
 package com.hyperether.pointsnaps.ui.main
 
 import android.location.Geocoder
-import android.location.LocationProvider
 import android.os.Bundle
 import android.os.Looper
 import androidx.fragment.app.Fragment
@@ -12,8 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hyperether.pointsnaps.Location
@@ -93,7 +90,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         val geocoder = Geocoder(context)
         try {
             val address = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1).get(0)
-            viewModel.setAddress(Location(latLng.latitude, latLng.longitude, address.getAddressLine(0)))
+            viewModel.setLocation(Location(latLng.latitude, latLng.longitude, address.getAddressLine(0)))
         } catch (exception: Exception) {
 
         }
