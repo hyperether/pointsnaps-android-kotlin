@@ -9,10 +9,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -66,11 +67,13 @@ class MainFragment : Fragment() {
                 return@setOnMenuItemClickListener true
             } else if (it.itemId == R.id.dark_menu_item) {
                 AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_YES)
+                    AppCompatDelegate.MODE_NIGHT_YES
+                )
                 return@setOnMenuItemClickListener true
             } else if (it.itemId == R.id.light_menu_item) {
                 AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO)
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )
                 return@setOnMenuItemClickListener true
             }
             return@setOnMenuItemClickListener false
@@ -270,15 +273,22 @@ class MainFragment : Fragment() {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_upload_btn))
             buttonTxt.text = getString(R.string.upload)
             mainButton.setOnClickListener {
-                viewModel.upload(
-                    file,
-                    file.name,
-                    file.extension,
-                    location.address,
-                    location.lon,
-                    location.lat,
-                    description
-                )
+                if (PointSnapsSDK.isUserLoggedIn())
+                    viewModel.upload(
+                        file,
+                        file.name,
+                        file.extension,
+                        location.address,
+                        location.lon,
+                        location.lat,
+                        description
+                    )
+                else
+                    Toast.makeText(
+                        context,
+                        "You must be logged in if you want to upload a image!",
+                        Toast.LENGTH_LONG
+                    ).show()
             }
         }
 
