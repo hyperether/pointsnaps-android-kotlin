@@ -47,14 +47,14 @@ class RegisterFragment : Fragment() {
             } else if (!Utils.fullNameValidator(usernameET)) {
                 Toast.makeText(
                     context,
-                    "Please specify FULL NAME like: 'NAME LASTNAME'",
+                    getString(R.string.full_name_validation_toast),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
                 viewModel.registerUser(
                     emailET.text.toString(),
-                    usernameET.text.toString().split(" ").get(0),
-                    usernameET.text.toString().split(" ").get(1),
+                    usernameET.text.toString().split(" ")[0],
+                    usernameET.text.toString().split(" ")[1],
                     passwordET.text.toString(),
                     codeET.text.toString()
                 )

@@ -27,4 +27,5 @@
     <string name="company_code">Company code</string>
     <string name="full_name">Full name</string>
     <string name="fill_fields">Please fill all fields!</string>
+    <string name="full_name_validation_toast">Please specify FULL NAME like: \'NAME LASTNAME\'</string>
 </resources>
