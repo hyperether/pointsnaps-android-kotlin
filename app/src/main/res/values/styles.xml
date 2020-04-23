@@ -7,7 +7,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textAppearance">@style/Text</item>
+        <item name="actionOverflowMenuStyle">@style/CMOptionsMenu</item>
     </style>
+
+    <style name="CMOptionsMenu" parent="Theme.AppCompat.DayNight">
+        <item name="android:popupBackground">@color/colorPrimary</item>
+    </style>
+
 
     <style name="MainButton">
         <item name="textAllCaps">false</item>
