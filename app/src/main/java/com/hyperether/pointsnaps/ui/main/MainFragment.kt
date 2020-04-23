@@ -28,6 +28,7 @@ import com.hyperether.pointsnaps.utils.Constants
 import com.hyperether.pointsnaps.utils.Utils
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
+import java.io.InputStream
 
 class MainFragment : Fragment() {
 
@@ -205,8 +206,7 @@ class MainFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     roundedImage.setImageURI(data!!.data)
                     roundedImageLayout.visibility = VISIBLE
-                    //todo provide file
-                    file = File(data.data!!.path!!)
+                    file = Utils.getFileFromUri(data.data!!, context!!)
                 }
         }
     }
