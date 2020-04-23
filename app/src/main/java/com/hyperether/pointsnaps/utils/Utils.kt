@@ -5,11 +5,27 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.widget.EditText
 import java.io.*
 
 
 class Utils() {
     companion object {
+
+        fun fieldEmptyValidator(arr:Array<EditText>):Boolean {
+            arr.forEach {
+                if (it.text.toString().trim().isEmpty()) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        fun fullNameValidator(edit: EditText): Boolean {
+            val fullName = edit.text.toString().trim()
+            val arr = fullName.split(" ")
+            return arr.size == 2
+        }
 
         @Throws(IOException::class)
         fun createImageFile(context: Context): File {
