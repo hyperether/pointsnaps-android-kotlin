@@ -23,10 +23,13 @@ class MainViewModel : ViewModel() {
         this.file.postValue(file)
     }
 
-    fun upload(file: File, fileName: String, ext: String, address:String, lon: Double, lat: Double, description: String) {
+    fun upload(f: File, fileName: String, ext: String, address:String, lon: Double, lat: Double, description: String) {
         viewModelScope.launch {
-            val response = PointSnapsSDK.uploadImage(file, fileName, ext, address, lon, lat, description)
+            val response = PointSnapsSDK.uploadImage(f, fileName, ext, address, lon, lat, description)
             if (response.success) {
+                file.postValue(File(""))
+                descriptionData.postValue("")
+                location.postValue(Location())
                 successUpload.postValue(response.success)
             } else {
                 error.postValue(response.message)

@@ -54,6 +54,12 @@ class Utils() {
             return file
         }
 
+        fun isNotFileEmpty(file: File): Boolean {
+            return file.length() > 0
+        }
+
     }
+
+
 
 }

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
@@ -33,8 +34,8 @@ import java.io.File
 class MainFragment : Fragment() {
 
     private var description = ""
-    private lateinit var file: File
-    private lateinit var location: Location
+    private var file: File = File("")
+    private var location = Location()
     private var sucess = false
 
     private lateinit var viewModel: MainViewModel
@@ -102,16 +103,16 @@ class MainFragment : Fragment() {
     fun setupObservers() {
         viewModel.file.observe(viewLifecycleOwner, Observer {
             file = it
-            roundedImage.setImageURI(Uri.parse(file.absolutePath))
-            roundedImageLayout.visibility = VISIBLE
+            if (Utils.isNotFileEmpty(file)) {
+                roundedImage.setImageURI(Uri.parse(file.absolutePath))
+                roundedImageLayout.visibility = VISIBLE
+            } else {
+                roundedImageLayout.visibility = GONE
+            }
         })
 
         viewModel.descriptionData.observe(viewLifecycleOwner, Observer {
             description = it
-        })
-
-        viewModel.successUpload.observe(viewLifecycleOwner, Observer {
-            sucess = it
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
@@ -120,6 +121,12 @@ class MainFragment : Fragment() {
 
         viewModel.location.observe(viewLifecycleOwner, Observer {
             location = it
+        })
+
+        viewModel.successUpload.observe(viewLifecycleOwner, Observer {
+            sucess = it
+            Toast.makeText(context, getString(R.string.success_upload), Toast.LENGTH_LONG).show()
+            buttonChecker()
         })
     }
 
@@ -241,13 +248,13 @@ class MainFragment : Fragment() {
     }
 
     fun buttonChecker() {
-        if (!this::file.isInitialized) {
+        if (!Utils.isNotFileEmpty(file)) {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_camera_btn))
             buttonTxt.text = getString(R.string.take_a_photo)
             mainButton.setOnClickListener {
                 openFileChooser()
             }
-        } else if (!this::location.isInitialized) {
+        } else if (location.address.isEmpty()) {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_location_btn))
             buttonTxt.text = getString(R.string.add_location)
             mainButton.setOnClickListener {
