@@ -9,10 +9,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
@@ -33,6 +35,7 @@ class MainFragment : Fragment() {
     private var description = ""
     private lateinit var file: File
     private lateinit var location: Location
+    private var sucess = false
 
     private lateinit var viewModel: MainViewModel
 
@@ -61,8 +64,12 @@ class MainFragment : Fragment() {
             } else if (it.itemId == R.id.logout_menu_item) {
                 return@setOnMenuItemClickListener true
             } else if (it.itemId == R.id.dark_menu_item) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES)
                 return@setOnMenuItemClickListener true
             } else if (it.itemId == R.id.light_menu_item) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO)
                 return@setOnMenuItemClickListener true
             }
             return@setOnMenuItemClickListener false
@@ -104,7 +111,7 @@ class MainFragment : Fragment() {
         })
 
         viewModel.successUpload.observe(viewLifecycleOwner, Observer {
-            //todo clear views
+            sucess = it
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
