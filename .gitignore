@@ -1,3 +1,4 @@
+/.gradle/
 *.iml
 /.gradle
 /local.properties
@@ -9,5 +10,5 @@
 /captures
 .externalNativeBuild
 .aar
-src/main/res/values/google_maps_api.xml
-/libs/pointsnapssdkkotlin-debug.aar
+/app/src/main/res/values/google_maps_api.xml
+/app/libs/pointsnapssdkkotlin-debug.aar
