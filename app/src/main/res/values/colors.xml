@@ -19,4 +19,6 @@
 
     <color name="splitter">#f9f9f9</color>
     <color name="dialog_background">#ffffff</color>
+
+    <color name="toolbar_title">#02478c</color>
 </resources>

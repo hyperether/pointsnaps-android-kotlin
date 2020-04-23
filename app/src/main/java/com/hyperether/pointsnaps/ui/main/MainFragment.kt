@@ -9,10 +9,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -26,6 +24,7 @@ import com.hyperether.pointsnaps.Location
 import com.hyperether.pointsnaps.R
 import com.hyperether.pointsnaps.utils.Constants
 import com.hyperether.pointsnaps.utils.Utils
+import com.hyperether.pointsnapssdk.PointSnapsSDK
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
@@ -48,6 +47,26 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
+
+        if (!PointSnapsSDK.isUserLoggedIn()) {
+            toolbar.inflateMenu(R.menu.login_menu)
+        } else {
+            toolbar.inflateMenu(R.menu.main_menu)
+        }
+
+        toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.login_menu_item) {
+                findNavController().navigate(R.id.goToAuthNav)
+                return@setOnMenuItemClickListener true
+            } else if (it.itemId == R.id.logout_menu_item) {
+                return@setOnMenuItemClickListener true
+            } else if (it.itemId == R.id.dark_menu_item) {
+                return@setOnMenuItemClickListener true
+            } else if (it.itemId == R.id.light_menu_item) {
+                return@setOnMenuItemClickListener true
+            }
+            return@setOnMenuItemClickListener false
+        }
 
         setupObservers()
 
