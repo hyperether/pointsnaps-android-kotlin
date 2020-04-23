@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/point"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textColor="@color/button_main"
                 android:fontFamily="@font/poppins_bold"/>
 
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/snaps"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/toolbar_title"
                 android:fontFamily="@font/poppins_regular"/>

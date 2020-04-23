@@ -24,4 +24,5 @@
     <string name="logout">Logout</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
+    <string name="company_code">Company code</string>
 </resources>

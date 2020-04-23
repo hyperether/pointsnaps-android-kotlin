@@ -11,8 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.hyperether.pointsnaps.R
+import kotlinx.android.synthetic.main.fragment_location.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.passwordET
+import kotlinx.android.synthetic.main.fragment_login.toolbar
 
 class LoginFragment : Fragment() {
 
@@ -28,7 +30,11 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
-
+        toolbar.setTitle(getString(R.string.sign_in))
+        toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.goToMainNav)
+        }
         setupObservers()
 
         signupTxt.setOnClickListener { v ->
