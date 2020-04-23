@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
@@ -39,10 +41,27 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
+        toolbar.setTitle(getString(R.string.location))
+        toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         val mapFragment : SupportMapFragment? =
             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         setupObservers()
         mapFragment?.getMapAsync(this)
+
+        acceptBtn.setOnClickListener {
+            if(this::latLng.isInitialized) {
+                findNavController().popBackStack()
+            } else {
+                Toast.makeText(context, "Location is not set", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        declineBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     fun setupObservers() {
@@ -87,8 +106,8 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun setupAddress(latLng: LatLng) {
-        val geocoder = Geocoder(context)
         try {
+            val geocoder = Geocoder(context)
             val address = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1).get(0)
             viewModel.setLocation(Location(latLng.latitude, latLng.longitude, address.getAddressLine(0)))
         } catch (exception: Exception) {

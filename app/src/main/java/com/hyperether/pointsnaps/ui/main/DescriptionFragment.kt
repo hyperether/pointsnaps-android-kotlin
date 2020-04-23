@@ -5,10 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.hyperether.pointsnaps.R
 import kotlinx.android.synthetic.main.fragment_description.*
+import kotlinx.android.synthetic.main.fragment_description.toolbar
+import kotlinx.android.synthetic.main.fragment_location.*
 
 /**
  * A simple [Fragment] subclass.
@@ -29,11 +33,21 @@ class DescriptionFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
 
+        toolbar.setTitle(getString(R.string.description))
+        toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         buttonDes.setOnClickListener {
             val description = descriptionTxt.text.toString()
-            if (!description.isEmpty())
+            if (!description.isEmpty()) {
                 viewModel.setDescription(description)
+                findNavController().popBackStack()
+            }
         }
+
+        descriptionTxt.requestFocus()
     }
 
 }
