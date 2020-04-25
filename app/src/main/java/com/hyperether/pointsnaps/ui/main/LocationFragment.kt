@@ -3,27 +3,29 @@ package com.hyperether.pointsnaps.ui.main
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hyperether.pointsnaps.Location
-
 import com.hyperether.pointsnaps.R
+import com.hyperether.pointsnaps.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_location.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class LocationFragment : Fragment(), OnMapReadyCallback {
+class LocationFragment : BaseFragment(), OnMapReadyCallback {
 
     lateinit var viewModel: MainViewModel
     lateinit var fuseLocationClient: FusedLocationProviderClient
@@ -46,16 +48,16 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        val mapFragment : SupportMapFragment? =
+        val mapFragment: SupportMapFragment? =
             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         setupObservers()
         mapFragment?.getMapAsync(this)
 
         acceptBtn.setOnClickListener {
-            if(this::latLng.isInitialized) {
+            if (this::latLng.isInitialized) {
                 findNavController().popBackStack()
             } else {
-                Toast.makeText(context, "Location is not set", Toast.LENGTH_LONG).show()
+                createToast(getString(R.string.loc_not_set))
             }
         }
 
@@ -87,7 +89,11 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         mLocationRequest.fastestInterval = 0
         mLocationRequest.numUpdates = 1
         fuseLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
-        fuseLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.getMainLooper())
+        fuseLocationClient.requestLocationUpdates(
+            mLocationRequest,
+            mLocationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     private val mLocationCallback = object : LocationCallback() {
@@ -109,7 +115,13 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         try {
             val geocoder = Geocoder(context)
             val address = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1).get(0)
-            viewModel.setLocation(Location(latLng.latitude, latLng.longitude, address.getAddressLine(0)))
+            viewModel.setLocation(
+                Location(
+                    latLng.latitude,
+                    latLng.longitude,
+                    address.getAddressLine(0)
+                )
+            )
         } catch (exception: Exception) {
 
         }

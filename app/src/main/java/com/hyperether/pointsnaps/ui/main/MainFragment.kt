@@ -15,7 +15,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.ActivityCompat
@@ -73,10 +72,6 @@ class MainFragment : BaseFragment() {
         cam_change.setOnClickListener {
             openFileChooser()
         }
-
-        mainButton.setOnClickListener {
-            Toast.makeText(context, description, Toast.LENGTH_LONG).show()
-        }
     }
 
 
@@ -100,7 +95,7 @@ class MainFragment : BaseFragment() {
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            createToast(it)
         })
 
         viewModel.location.observe(viewLifecycleOwner, Observer {
@@ -114,8 +109,7 @@ class MainFragment : BaseFragment() {
         viewModel.successUpload.observe(viewLifecycleOwner, Observer {
             sucess = it
             if (it) {
-                Toast.makeText(context, getString(R.string.success_upload), Toast.LENGTH_LONG)
-                    .show()
+                createToast(getString(R.string.success_upload))
             }
             buttonChecker()
         })

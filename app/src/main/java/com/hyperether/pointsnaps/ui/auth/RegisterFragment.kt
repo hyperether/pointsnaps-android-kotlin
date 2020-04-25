@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.R
+import com.hyperether.pointsnaps.ui.base.BaseFragment
 import com.hyperether.pointsnaps.utils.Utils
-import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.android.synthetic.main.fragment_register.*
 
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : BaseFragment() {
     // TODO: Rename and change types of parameters
 
 
@@ -43,13 +41,9 @@ class RegisterFragment : Fragment() {
         }
         signupBtn.setOnClickListener {
             if (!Utils.fieldEmptyValidator(arrayOf(emailET, passwordET, codeET, usernameET))) {
-                Toast.makeText(context, getString(R.string.fill_fields), Toast.LENGTH_LONG).show()
+                createToast(getString(R.string.fill_fields))
             } else if (!Utils.fullNameValidator(usernameET)) {
-                Toast.makeText(
-                    context,
-                    getString(R.string.full_name_validation_toast),
-                    Toast.LENGTH_LONG
-                ).show()
+                createToast(getString(R.string.full_name_validation_toast))
             } else {
                 viewModel.registerUser(
                     emailET.text.toString(),
@@ -64,7 +58,7 @@ class RegisterFragment : Fragment() {
 
     fun setupObservers() {
         viewModel.error.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            createToast(it)
         })
 
         viewModel.registerUser.observe(viewLifecycleOwner, Observer {

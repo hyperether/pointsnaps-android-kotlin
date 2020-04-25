@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/text_black_white"
             android:gravity="center_vertical"
+            android:paddingEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
