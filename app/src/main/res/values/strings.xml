@@ -29,4 +29,5 @@
     <string name="fill_fields">Please fill all fields!</string>
     <string name="full_name_validation_toast">Please specify FULL NAME like: \'NAME LASTNAME\'</string>
     <string name="success_upload">Successfully uploaded image!</string>
+    <string name="must_login">You must be logged in if you want to upload a image!</string>
 </resources>

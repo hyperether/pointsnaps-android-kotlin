@@ -26,13 +26,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.Location
 import com.hyperether.pointsnaps.R
+import com.hyperether.pointsnaps.ui.base.BaseFragment
 import com.hyperether.pointsnaps.utils.Constants
 import com.hyperether.pointsnaps.utils.Utils
 import com.hyperether.pointsnapssdk.PointSnapsSDK
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
 
     private var description = ""
     private var file: File = File("")
@@ -284,11 +285,7 @@ class MainFragment : Fragment() {
                         description
                     )
                 else
-                    Toast.makeText(
-                        context,
-                        "You must be logged in if you want to upload a image!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    createToast(getString(R.string.must_login))
             }
         }
 
