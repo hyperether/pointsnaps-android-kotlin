@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -117,6 +116,10 @@ class MainFragment : BaseFragment() {
 
         viewModel.descriptionData.observe(viewLifecycleOwner, Observer {
             description = it
+            if (description.isNotEmpty())
+                buttonDesTxt.text = description
+            else
+                buttonDesTxt.text = getString(R.string.description)
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
@@ -125,6 +128,10 @@ class MainFragment : BaseFragment() {
 
         viewModel.location.observe(viewLifecycleOwner, Observer {
             location = it
+            if (location.address.isNotEmpty())
+                buttonLocTxt.text = location.address
+            else
+                buttonLocTxt.text = getString(R.string.location)
         })
 
         viewModel.successUpload.observe(viewLifecycleOwner, Observer {
