@@ -110,6 +110,7 @@ class MainFragment : BaseFragment() {
             sucess = it
             if (it) {
                 createToast(getString(R.string.success_upload))
+                viewModel.successUpload.postValue(false)
             }
             buttonChecker()
         })
@@ -255,7 +256,8 @@ class MainFragment : BaseFragment() {
             buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_upload_btn))
             buttonTxt.text = getString(R.string.upload)
             mainButton.setOnClickListener {
-                if (PointSnapsSDK.isUserLoggedIn())
+                if (PointSnapsSDK.isUserLoggedIn()) {
+                    progressBar.visibility = VISIBLE
                     viewModel.upload(
                         file,
                         file.name,
@@ -264,9 +266,12 @@ class MainFragment : BaseFragment() {
                         location.lon,
                         location.lat,
                         description
-                    )
-                else
+                    ) {
+                        progressBar.visibility = GONE
+                    }
+                } else {
                     createToast(getString(R.string.must_login))
+                }
             }
         }
 

@@ -30,7 +30,8 @@ class MainViewModel : ViewModel() {
         address: String,
         lon: Double,
         lat: Double,
-        description: String
+        description: String,
+        progressFinish: (Boolean?) -> Unit
     ) {
         viewModelScope.launch {
             val response =
@@ -40,10 +41,10 @@ class MainViewModel : ViewModel() {
                 descriptionData.postValue("")
                 location.postValue(Location())
                 successUpload.postValue(response.success)
-                successUpload.postValue(false)
             } else {
                 error.postValue(response.message)
             }
+            progressFinish(true)
         }
     }
 

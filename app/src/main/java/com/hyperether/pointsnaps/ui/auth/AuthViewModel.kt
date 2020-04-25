@@ -15,7 +15,7 @@ class AuthViewModel : ViewModel() {
     val registerUser = MutableLiveData<User>()
 
 
-    fun loginUser(email: String, password: String) {
+    fun loginUser(email: String, password: String, progressFinish: (Boolean?) -> Unit) {
         viewModelScope.launch {
             val result = PointSnapsSDK.login(email, password)
             if (result.success) {
@@ -26,7 +26,14 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun registerUser(email: String, firstName: String, lastName: String, password: String, code: String) {
+    fun registerUser(
+        email: String,
+        firstName: String,
+        lastName: String,
+        password: String,
+        code: String,
+        finishProgress: (Boolean?) -> Unit
+    ) {
         viewModelScope.launch {
             val result = PointSnapsSDK.register(email, firstName, lastName, password, code)
             if (result.success) {

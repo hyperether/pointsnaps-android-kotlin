@@ -3,6 +3,8 @@ package com.hyperether.pointsnaps.ui.auth
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,13 +47,16 @@ class RegisterFragment : BaseFragment() {
             } else if (!Utils.fullNameValidator(usernameET)) {
                 createToast(getString(R.string.full_name_validation_toast))
             } else {
+                progressBar.visibility = VISIBLE
                 viewModel.registerUser(
                     emailET.text.toString(),
                     usernameET.text.toString().split(" ")[0],
                     usernameET.text.toString().split(" ")[1],
                     passwordET.text.toString(),
                     codeET.text.toString()
-                )
+                ) {
+                    progressBar.visibility = GONE
+                }
             }
         }
     }

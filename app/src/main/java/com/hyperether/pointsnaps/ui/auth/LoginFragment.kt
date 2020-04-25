@@ -3,6 +3,8 @@ package com.hyperether.pointsnaps.ui.auth
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -38,7 +40,10 @@ class LoginFragment : BaseFragment() {
 
         signinBtn.setOnClickListener {
             if (!usernameET.text.toString().isEmpty() && !passwordET.text.toString().isEmpty())
-                viewModel.loginUser(usernameET.text.toString(), passwordET.text.toString())
+                progressBar.visibility = VISIBLE
+                viewModel.loginUser(usernameET.text.toString(), passwordET.text.toString()) {
+                    progressBar.visibility = GONE
+                }
         }
     }
 
