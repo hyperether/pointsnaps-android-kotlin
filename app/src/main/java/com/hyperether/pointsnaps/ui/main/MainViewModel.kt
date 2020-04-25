@@ -3,7 +3,7 @@ package com.hyperether.pointsnaps.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hyperether.pointsnaps.Location
+import com.hyperether.pointsnaps.model.Location
 import com.hyperether.pointsnapssdk.PointSnapsSDK
 import kotlinx.coroutines.launch
 import java.io.File

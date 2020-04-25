@@ -1,4 +1,4 @@
-package com.hyperether.pointsnaps
+package com.hyperether.pointsnaps.model
 
 data class Location(
     val lat: Double = 0.0,

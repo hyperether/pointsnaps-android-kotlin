@@ -23,7 +23,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.hyperether.pointsnaps.Location
+import com.hyperether.pointsnaps.model.Location
 import com.hyperether.pointsnaps.R
 import com.hyperether.pointsnaps.ui.base.BaseFragment
 import com.hyperether.pointsnaps.utils.Constants
@@ -324,11 +324,13 @@ class MainFragment : BaseFragment() {
                 }
                 return@setOnMenuItemClickListener true
             } else if (it.itemId == R.id.dark_menu_item) {
+                PointSnapsSDK.setDarkMode()
                 AppCompatDelegate.setDefaultNightMode(
                     AppCompatDelegate.MODE_NIGHT_YES
                 )
                 return@setOnMenuItemClickListener true
             } else if (it.itemId == R.id.light_menu_item) {
+                PointSnapsSDK.setLightMode()
                 AppCompatDelegate.setDefaultNightMode(
                     AppCompatDelegate.MODE_NIGHT_NO
                 )

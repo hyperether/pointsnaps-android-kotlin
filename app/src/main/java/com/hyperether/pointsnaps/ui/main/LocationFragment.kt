@@ -17,7 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.hyperether.pointsnaps.Location
+import com.hyperether.pointsnaps.model.Location
 import com.hyperether.pointsnaps.R
 import com.hyperether.pointsnaps.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_location.*
