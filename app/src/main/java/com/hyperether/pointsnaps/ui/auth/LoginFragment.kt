@@ -50,6 +50,7 @@ class LoginFragment : Fragment() {
     private fun setupObservers() {
         viewModel.user.observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                viewModel.user.postValue(null)
                 findNavController().navigate(R.id.goToMainNav)
             }
         })

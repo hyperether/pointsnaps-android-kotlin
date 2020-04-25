@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
     var location = MutableLiveData<Location>()
     var file = MutableLiveData<File>()
 
-    fun setDescription(description: String){
+    fun setDescription(description: String) {
         descriptionData.postValue(description)
     }
 
@@ -23,14 +23,24 @@ class MainViewModel : ViewModel() {
         this.file.postValue(file)
     }
 
-    fun upload(f: File, fileName: String, ext: String, address:String, lon: Double, lat: Double, description: String) {
+    fun upload(
+        f: File,
+        fileName: String,
+        ext: String,
+        address: String,
+        lon: Double,
+        lat: Double,
+        description: String
+    ) {
         viewModelScope.launch {
-            val response = PointSnapsSDK.uploadImage(f, fileName, ext, address, lon, lat, description)
+            val response =
+                PointSnapsSDK.uploadImage(f, fileName, ext, address, lon, lat, description)
             if (response.success) {
                 file.postValue(File(""))
                 descriptionData.postValue("")
                 location.postValue(Location())
                 successUpload.postValue(response.success)
+                successUpload.postValue(false)
             } else {
                 error.postValue(response.message)
             }
@@ -39,5 +49,9 @@ class MainViewModel : ViewModel() {
 
     fun setLocation(location: Location) {
         this.location.postValue(location)
+    }
+
+    suspend fun logout(): Boolean {
+        return PointSnapsSDK.logout().success
     }
 }

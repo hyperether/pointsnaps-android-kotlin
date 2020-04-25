@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.Location
 import com.hyperether.pointsnaps.R
@@ -30,6 +31,7 @@ import com.hyperether.pointsnaps.utils.Constants
 import com.hyperether.pointsnaps.utils.Utils
 import com.hyperether.pointsnapssdk.PointSnapsSDK
 import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.coroutines.launch
 import java.io.File
 
 class MainFragment : BaseFragment() {
@@ -52,32 +54,7 @@ class MainFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
-
-        if (!PointSnapsSDK.isUserLoggedIn()) {
-            toolbar.inflateMenu(R.menu.login_menu)
-        } else {
-            toolbar.inflateMenu(R.menu.main_menu)
-        }
-
-        toolbar.setOnMenuItemClickListener {
-            if (it.itemId == R.id.login_menu_item) {
-                findNavController().navigate(R.id.goToAuthNav)
-                return@setOnMenuItemClickListener true
-            } else if (it.itemId == R.id.logout_menu_item) {
-                return@setOnMenuItemClickListener true
-            } else if (it.itemId == R.id.dark_menu_item) {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_YES
-                )
-                return@setOnMenuItemClickListener true
-            } else if (it.itemId == R.id.light_menu_item) {
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO
-                )
-                return@setOnMenuItemClickListener true
-            }
-            return@setOnMenuItemClickListener false
-        }
+        setToolBar()
 
         setupObservers()
 
@@ -136,7 +113,10 @@ class MainFragment : BaseFragment() {
 
         viewModel.successUpload.observe(viewLifecycleOwner, Observer {
             sucess = it
-            Toast.makeText(context, getString(R.string.success_upload), Toast.LENGTH_LONG).show()
+            if (it) {
+                Toast.makeText(context, getString(R.string.success_upload), Toast.LENGTH_LONG)
+                    .show()
+            }
             buttonChecker()
         })
     }
@@ -320,6 +300,42 @@ class MainFragment : BaseFragment() {
             }
         } else {
             findNavController().navigate(R.id.action_main_to_location)
+        }
+    }
+
+    private fun setToolBar() {
+        toolbar.menu.clear()
+        if (!PointSnapsSDK.isUserLoggedIn()) {
+            toolbar.inflateMenu(R.menu.login_menu)
+        } else {
+            toolbar.inflateMenu(R.menu.main_menu)
+        }
+
+        toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.login_menu_item) {
+                findNavController().navigate(R.id.goToAuthNav)
+                return@setOnMenuItemClickListener true
+            } else if (it.itemId == R.id.logout_menu_item) {
+                lifecycleScope.launch {
+                    val logout = viewModel.logout()
+                    if (logout) {
+                        createToast(getString(R.string.logout_toast))
+                    }
+                    setToolBar()
+                }
+                return@setOnMenuItemClickListener true
+            } else if (it.itemId == R.id.dark_menu_item) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES
+                )
+                return@setOnMenuItemClickListener true
+            } else if (it.itemId == R.id.light_menu_item) {
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )
+                return@setOnMenuItemClickListener true
+            }
+            return@setOnMenuItemClickListener false
         }
     }
 }
