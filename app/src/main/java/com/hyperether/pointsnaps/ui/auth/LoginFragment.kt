@@ -6,63 +6,73 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.R
+import com.hyperether.pointsnaps.databinding.FragmentLoginBinding
 import com.hyperether.pointsnaps.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_login.*
+
 
 class LoginFragment : BaseFragment() {
 
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
     private lateinit var viewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    ): View {
+        _binding = FragmentLoginBinding.inflate(
+            inflater, container, false
+        )
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(activity!!).get(AuthViewModel::class.java)
-        toolbar.setTitle(getString(R.string.sign_in))
-        toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
-        toolbar.setNavigationOnClickListener {
-            findNavController().navigate(R.id.goToMainNav)
-        }
-        setupObservers()
+        viewModel = ViewModelProvider(activity!!)[AuthViewModel::class.java]
+        binding.apply {
+            toolbar.title = getString(R.string.sign_in)
+            toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_navigation_icon)
+            toolbar.setNavigationOnClickListener {
+                findNavController().navigate(R.id.goToMainNav)
+            }
 
-        signupTxt.setOnClickListener { v ->
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment);
-        }
+            signupTxt.setOnClickListener {
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            }
 
-        signinBtn.setOnClickListener {
-            if (!usernameET.text.toString().isEmpty() && !passwordET.text.toString().isEmpty())
-                progressBar.visibility = VISIBLE
+            signinBtn.setOnClickListener {
+                if (usernameET.text.toString().isNotEmpty() && passwordET.text.toString()
+                        .isNotEmpty()
+                )
+                    progressBar.visibility = VISIBLE
                 viewModel.loginUser(usernameET.text.toString(), passwordET.text.toString()) {
                     progressBar.visibility = GONE
                 }
+            }
         }
+        setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.user.observe(viewLifecycleOwner, Observer {
+        viewModel.user.observe(viewLifecycleOwner) {
             if (it != null) {
                 viewModel.user.postValue(null)
                 findNavController().navigate(R.id.goToMainNav)
             }
-        })
+        }
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
+        viewModel.error.observe(viewLifecycleOwner) {
             createToast(it)
-        })
+        }
 
-        viewModel.registerUser.observe(viewLifecycleOwner, Observer {
-            usernameET.setText(it.email)
-            passwordET.setText(it.password)
-        })
+        viewModel.registerUser.observe(viewLifecycleOwner) {
+            binding.apply {
+                usernameET.setText(it.email)
+                passwordET.setText(it.password)
+            }
+        }
     }
-
 }
