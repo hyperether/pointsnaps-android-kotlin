@@ -42,8 +42,9 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         binding.apply {
             toolbar.title = getString(R.string.location)
@@ -78,8 +79,7 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
-        googleMap ?: return
+    override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapLongClickListener {
             latLng = it
