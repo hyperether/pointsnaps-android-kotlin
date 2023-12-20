@@ -64,8 +64,8 @@
             android:id="@+id/map"
             tools:context=".LocationFragment"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
-    </androidx.cardview.widget.CardView>
 
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/acceptBtn"
@@ -87,7 +87,6 @@
             android:layout_gravity="center"/>
 
     </androidx.cardview.widget.CardView>
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/declineBtn"

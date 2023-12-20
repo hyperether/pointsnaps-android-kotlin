@@ -40,7 +40,7 @@ class Utils {
 
         fun getFileFromUri(uri: Uri, context: Context): File {
             val file = createImageFile(context)
-            val inputStream: InputStream = context.getContentResolver().openInputStream(uri)!!
+            val inputStream: InputStream = context.contentResolver.openInputStream(uri)!!
             val bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
             val bos = ByteArrayOutputStream()

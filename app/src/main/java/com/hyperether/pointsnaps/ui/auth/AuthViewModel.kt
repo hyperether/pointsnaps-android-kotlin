@@ -35,9 +35,21 @@ class AuthViewModel : ViewModel() {
         finishProgress: (Boolean?) -> Unit
     ) {
         viewModelScope.launch {
-            val result = PointSnapsSDK.register(email, firstName, lastName, password, code)
+            val result = PointSnapsSDK.register(
+                email, firstName, lastName, password, code
+            )
             if (result.success) {
-                registerUser.postValue(User(firstName, lastName, password, email, false, false, ""))
+                registerUser.postValue(
+                    User(
+                        firstName = firstName,
+                        lastName = lastName,
+                        password = password,
+                        email = email,
+                        isCompany = false,
+                        isAdmin = false,
+                        token = ""
+                    )
+                )
             } else {
                 error.postValue(result.message)
             }
