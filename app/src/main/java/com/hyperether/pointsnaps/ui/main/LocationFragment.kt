@@ -1,5 +1,6 @@
 package com.hyperether.pointsnaps.ui.main
 
+import android.annotation.SuppressLint
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
@@ -7,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -19,14 +19,16 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.hyperether.pointsnaps.model.Location
 import com.hyperether.pointsnaps.R
+import com.hyperether.pointsnaps.databinding.FragmentLocationBinding
 import com.hyperether.pointsnaps.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_location.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class LocationFragment : BaseFragment(), OnMapReadyCallback {
 
+    private var _binding: FragmentLocationBinding? = null
+    private val binding get() = _binding!!
     lateinit var viewModel: MainViewModel
     lateinit var fuseLocationClient: FusedLocationProviderClient
     lateinit var mMap: GoogleMap
@@ -35,25 +37,28 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_location, container, false)
+    ): View {
+        _binding = FragmentLocationBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
-        toolbar.setTitle(getString(R.string.location))
-        toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+        viewModel = ViewModelProvider(activity!!)[MainViewModel::class.java]
+        binding.apply {
+            toolbar.title = getString(R.string.location)
+            toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_navigation_icon)
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
         }
+
         val mapFragment: SupportMapFragment? =
             childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         setupObservers()
         mapFragment?.getMapAsync(this)
 
-        acceptBtn.setOnClickListener {
+        binding.acceptBtn.setOnClickListener {
             if (this::latLng.isInitialized) {
                 findNavController().popBackStack()
             } else {
@@ -61,15 +66,15 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
             }
         }
 
-        declineBtn.setOnClickListener {
+        binding.declineBtn.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
-    fun setupObservers() {
-        viewModel.location.observe(viewLifecycleOwner, Observer {
-            locationTxt.text = it.address
-        })
+    private fun setupObservers() {
+        viewModel.location.observe(viewLifecycleOwner) {
+            binding.locationTxt.text = it.address
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -82,6 +87,7 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
         setupLocation()
     }
 
+    @SuppressLint("MissingPermission")
     fun setupLocation() {
         var mLocationRequest = LocationRequest()
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -111,23 +117,26 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
         setupAddress(latLng)
     }
 
-    fun setupAddress(latLng: LatLng) {
+    private fun setupAddress(latLng: LatLng) {
         try {
-            val geocoder = Geocoder(context)
-            val address = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1).get(0)
-            viewModel.setLocation(
-                Location(
-                    latLng.latitude,
-                    latLng.longitude,
-                    address.getAddressLine(0)
+            val geocoder = context?.let { Geocoder(it) }
+            val address = geocoder?.getFromLocation(
+                latLng.latitude,
+                latLng.longitude,
+                1
+            )?.get(0)
+            if (address != null)
+                viewModel.setLocation(
+                    Location(
+                        latLng.latitude,
+                        latLng.longitude,
+                        address.getAddressLine(0)
+                    )
                 )
-            )
         } catch (exception: Exception) {
 
         }
     }
-
-
 }
 
 
