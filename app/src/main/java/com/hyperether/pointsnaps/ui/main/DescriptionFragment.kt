@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.R
@@ -27,11 +28,12 @@ class DescriptionFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(activity!!)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         binding.apply {
             toolbar.title = getString(R.string.description)
-            toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_navigation_icon, null)
+            toolbar.navigationIcon =
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_navigation_icon, null)
             toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }

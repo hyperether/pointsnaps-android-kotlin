@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -43,10 +44,11 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(activity!!)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         binding.apply {
             toolbar.title = getString(R.string.location)
-            toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_navigation_icon)
+            toolbar.navigationIcon =
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_navigation_icon, null)
             toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
@@ -93,7 +95,7 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
         mLocationRequest.interval = 0
         mLocationRequest.fastestInterval = 0
         mLocationRequest.numUpdates = 1
-        fuseLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+        fuseLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fuseLocationClient.requestLocationUpdates(
             mLocationRequest,
             mLocationCallback,
@@ -103,7 +105,7 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
-            val location = locationResult!!.locations.get(0)
+            val location = locationResult!!.locations[0]
             latLng = LatLng(location.latitude, location.longitude)
             redrawMarker(latLng)
         }

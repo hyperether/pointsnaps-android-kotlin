@@ -17,7 +17,7 @@ open class BaseFragment : Fragment() {
         val layout: View = inflater.inflate(R.layout.custom_toast, null)
         val text: TextView = layout.findViewById(R.id.text)
         text.text = message
-        with(Toast(context!!.applicationContext)) {
+        with(Toast(requireContext().applicationContext)) {
             setGravity(gravity, xOff, yOff)
             duration = time
             view = layout

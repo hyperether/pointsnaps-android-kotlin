@@ -9,7 +9,7 @@ import android.widget.EditText
 import java.io.*
 
 
-class Utils() {
+class Utils {
     companion object {
 
         fun fieldEmptyValidator(arr:Array<EditText>):Boolean {
@@ -57,9 +57,5 @@ class Utils() {
         fun isNotFileEmpty(file: File): Boolean {
             return file.length() > 0
         }
-
     }
-
-
-
 }

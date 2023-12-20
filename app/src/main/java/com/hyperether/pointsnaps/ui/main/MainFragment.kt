@@ -56,7 +56,7 @@ class MainFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(activity!!)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         setToolBar()
 
         setupObservers()
@@ -79,7 +79,6 @@ class MainFragment : BaseFragment() {
             }
         }
     }
-
 
     private fun setupObservers() {
         viewModel.file.observe(viewLifecycleOwner) {
@@ -139,11 +138,11 @@ class MainFragment : BaseFragment() {
         camera.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ActivityCompat.checkSelfPermission(
-                        context!!,
+                        requireContext(),
                         Manifest.permission.CAMERA
                     ) == PackageManager.PERMISSION_DENIED ||
                     ActivityCompat.checkSelfPermission(
-                        context!!,
+                        requireContext(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
@@ -165,7 +164,7 @@ class MainFragment : BaseFragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (
                     ActivityCompat.checkSelfPermission(
-                        context!!,
+                        requireContext(),
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
@@ -206,11 +205,11 @@ class MainFragment : BaseFragment() {
     @SuppressLint("QueryPermissionsNeeded")
     private fun openCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-            intent.resolveActivity(context!!.packageManager)?.also {
-                file = Utils.createImageFile(context!!)
+            intent.resolveActivity(requireContext().packageManager)?.also {
+                file = Utils.createImageFile(requireContext())
                 file?.also {
                     val uri = FileProvider.getUriForFile(
-                        context!!,
+                        requireContext(),
                         "com.hyperether.pointsnaps.fileprovider",
                         it
                     )
@@ -236,7 +235,7 @@ class MainFragment : BaseFragment() {
 
             Constants.OPEN_FILES_REQUEST ->
                 if (resultCode == Activity.RESULT_OK) {
-                    file = Utils.getFileFromUri(data?.data!!, context!!)
+                    file = Utils.getFileFromUri(data?.data!!, requireContext())
                     viewModel.setFile(file)
                 }
         }
@@ -245,7 +244,12 @@ class MainFragment : BaseFragment() {
     fun buttonChecker() {
         if (!Utils.isNotFileEmpty(file)) {
             binding.apply {
-                buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_camera_btn))
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_camera_btn
+                    )
+                )
                 buttonTxt.text = getString(R.string.take_a_photo)
                 mainButton.setOnClickListener {
                     openFileChooser()
@@ -253,7 +257,12 @@ class MainFragment : BaseFragment() {
             }
         } else if (location.address.isEmpty()) {
             binding.apply {
-                buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_location_btn))
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_location_btn
+                    )
+                )
                 buttonTxt.text = getString(R.string.add_location)
                 mainButton.setOnClickListener {
                     findNavController().navigate(R.id.action_main_to_location)
@@ -261,7 +270,12 @@ class MainFragment : BaseFragment() {
             }
         } else if (description.isEmpty()) {
             binding.apply {
-                buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_description_btn))
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_description_btn
+                    )
+                )
                 buttonTxt.text = getString(R.string.add_description)
                 mainButton.setOnClickListener {
                     findNavController().navigate(R.id.action_main_to_description)
@@ -269,7 +283,12 @@ class MainFragment : BaseFragment() {
             }
         } else {
             binding.apply {
-                buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_upload_btn))
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_upload_btn
+                    )
+                )
                 buttonTxt.text = getString(R.string.upload)
                 mainButton.setOnClickListener {
                     if (PointSnapsSDK.isUserLoggedIn()) {
@@ -296,11 +315,11 @@ class MainFragment : BaseFragment() {
     private fun checkLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(
-                    context!!,
+                    requireContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_DENIED ||
                 ActivityCompat.checkSelfPermission(
-                    context!!,
+                    requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_DENIED
             ) {

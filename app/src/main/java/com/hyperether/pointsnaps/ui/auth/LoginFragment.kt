@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.R
@@ -29,10 +30,11 @@ class LoginFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(activity!!)[AuthViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[AuthViewModel::class.java]
         binding.apply {
             toolbar.title = getString(R.string.sign_in)
-            toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_navigation_icon)
+            toolbar.navigationIcon =
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_navigation_icon, null)
             toolbar.setNavigationOnClickListener {
                 findNavController().navigate(R.id.goToMainNav)
             }
