@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -25,6 +25,7 @@ import com.hyperether.pointsnaps.ui.base.BaseFragment
 
 class LocationFragment : BaseFragment(), OnMapReadyCallback {
 
+    private val tag: String = LocationFragment::class.java.name
     private var _binding: FragmentLocationBinding? = null
     private val binding get() = _binding!!
     lateinit var viewModel: MainViewModel
@@ -132,7 +133,7 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
                     )
                 )
         } catch (exception: Exception) {
-
+            Log.d(tag, "exception: $exception")
         }
     }
 }
