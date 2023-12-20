@@ -104,8 +104,8 @@ class LocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private val mLocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            val location = locationResult!!.locations[0]
+        override fun onLocationResult(locationResult: LocationResult) {
+            val location = locationResult.locations[0]
             latLng = LatLng(location.latitude, location.longitude)
             redrawMarker(latLng)
         }
