@@ -5,49 +5,46 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-
 import com.hyperether.pointsnaps.R
-import kotlinx.android.synthetic.main.fragment_description.*
-import kotlinx.android.synthetic.main.fragment_description.toolbar
-import kotlinx.android.synthetic.main.fragment_location.*
+import com.hyperether.pointsnaps.databinding.FragmentDescriptionBinding
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class DescriptionFragment : Fragment() {
 
-    lateinit var viewModel: MainViewModel
+    private var _binding: FragmentDescriptionBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_description, container, false)
+    ): View {
+        _binding = FragmentDescriptionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(activity!!)[MainViewModel::class.java]
 
-        toolbar.setTitle(getString(R.string.description))
-        toolbar.setNavigationIcon(resources.getDrawable(R.drawable.ic_navigation_icon))
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        buttonDes.setOnClickListener {
-            val description = descriptionTxt.text.toString()
-            if (!description.isEmpty()) {
-                viewModel.setDescription(description)
+        binding.apply {
+            toolbar.title = getString(R.string.description)
+            toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_navigation_icon, null)
+            toolbar.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
+
+            buttonDes.setOnClickListener {
+                val description = descriptionTxt.text.toString()
+                if (description.isNotEmpty()) {
+                    viewModel.setDescription(description)
+                    findNavController().popBackStack()
+                }
+            }
+
+            descriptionTxt.requestFocus()
         }
-
-        descriptionTxt.requestFocus()
     }
-
 }

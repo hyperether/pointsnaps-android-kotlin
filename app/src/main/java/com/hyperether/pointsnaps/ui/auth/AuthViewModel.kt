@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 class AuthViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 
-    val user = MutableLiveData<User>()
+    val user = MutableLiveData<User?>()
     val error = MutableLiveData<String>()
     val registerUser = MutableLiveData<User>()
 

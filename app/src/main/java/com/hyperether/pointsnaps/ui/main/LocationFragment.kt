@@ -22,9 +22,7 @@ import com.hyperether.pointsnaps.R
 import com.hyperether.pointsnaps.databinding.FragmentLocationBinding
 import com.hyperether.pointsnaps.ui.base.BaseFragment
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class LocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private var _binding: FragmentLocationBinding? = null
