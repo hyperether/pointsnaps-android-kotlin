@@ -14,7 +14,6 @@ class AuthViewModel : ViewModel() {
     val error = MutableLiveData<String>()
     val registerUser = MutableLiveData<User>()
 
-
     fun loginUser(email: String, password: String, progressFinish: (Boolean?) -> Unit) {
         viewModelScope.launch {
             val result = PointSnapsSDK.login(email, password)
