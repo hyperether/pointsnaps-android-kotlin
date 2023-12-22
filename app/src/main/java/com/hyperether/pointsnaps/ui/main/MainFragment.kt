@@ -1,6 +1,7 @@
 package com.hyperether.pointsnaps.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -19,22 +20,24 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hyperether.pointsnaps.model.Location
 import com.hyperether.pointsnaps.R
+import com.hyperether.pointsnaps.databinding.MainFragmentBinding
 import com.hyperether.pointsnaps.ui.base.BaseFragment
 import com.hyperether.pointsnaps.utils.Constants
 import com.hyperether.pointsnaps.utils.Utils
 import com.hyperether.pointsnapssdk.PointSnapsSDK
-import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.launch
 import java.io.File
 
+
 class MainFragment : BaseFragment() {
 
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
     private var description = ""
     private var file: File = File("")
     private var location = Location()
@@ -46,74 +49,76 @@ class MainFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(activity!!).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         setToolBar()
 
         setupObservers()
 
-        buttonLoc.setOnClickListener { v ->
-            checkLocationPermission()
-        }
+        binding.apply {
+            buttonLoc.setOnClickListener {
+                checkLocationPermission()
+            }
 
-        buttonDes.setOnClickListener { v ->
-            findNavController().navigate(R.id.action_main_to_description)
-        }
+            buttonDes.setOnClickListener {
+                findNavController().navigate(R.id.action_main_to_description)
+            }
 
-        cam.setOnClickListener {
-            openFileChooser()
-        }
+            cam.setOnClickListener {
+                openFileChooser()
+            }
 
-        cam_change.setOnClickListener {
-            openFileChooser()
+            camChange.setOnClickListener {
+                openFileChooser()
+            }
         }
     }
 
-
-    fun setupObservers() {
-        viewModel.file.observe(viewLifecycleOwner, Observer {
+    private fun setupObservers() {
+        viewModel.file.observe(viewLifecycleOwner) {
             file = it
             if (Utils.isNotFileEmpty(file)) {
-                roundedImage.setImageURI(Uri.parse(file.absolutePath))
-                roundedImageLayout.visibility = VISIBLE
+                binding.roundedImage.setImageURI(Uri.parse(file.absolutePath))
+                binding.roundedImageLayout.visibility = VISIBLE
             } else {
-                roundedImageLayout.visibility = GONE
+                binding.roundedImageLayout.visibility = GONE
             }
-        })
+        }
 
-        viewModel.descriptionData.observe(viewLifecycleOwner, Observer {
+        viewModel.descriptionData.observe(viewLifecycleOwner) {
             description = it
             if (description.isNotEmpty())
-                buttonDesTxt.text = description
+                binding.buttonDesTxt.text = description
             else
-                buttonDesTxt.text = getString(R.string.description)
-        })
+                binding.buttonDesTxt.text = getString(R.string.description)
+        }
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
+        viewModel.error.observe(viewLifecycleOwner) {
             createToast(it)
-        })
+        }
 
-        viewModel.location.observe(viewLifecycleOwner, Observer {
+        viewModel.location.observe(viewLifecycleOwner) {
             location = it
             if (location.address.isNotEmpty())
-                buttonLocTxt.text = location.address
+                binding.buttonLocTxt.text = location.address
             else
-                buttonLocTxt.text = getString(R.string.location)
-        })
+                binding.buttonLocTxt.text = getString(R.string.location)
+        }
 
-        viewModel.successUpload.observe(viewLifecycleOwner, Observer {
+        viewModel.successUpload.observe(viewLifecycleOwner) {
             sucess = it
             if (it) {
                 createToast(getString(R.string.success_upload))
                 viewModel.successUpload.postValue(false)
             }
             buttonChecker()
-        })
+        }
     }
 
     override fun onResume() {
@@ -122,7 +127,6 @@ class MainFragment : BaseFragment() {
     }
 
     fun openFileChooser() {
-
         val customLayout = layoutInflater.inflate(R.layout.choose_file_dialog, null)
         val camera = customLayout.findViewById<TextView>(R.id.photo)
         val files = customLayout.findViewById<TextView>(R.id.gallery)
@@ -134,11 +138,11 @@ class MainFragment : BaseFragment() {
         camera.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ActivityCompat.checkSelfPermission(
-                        context!!,
+                        requireContext(),
                         Manifest.permission.CAMERA
                     ) == PackageManager.PERMISSION_DENIED ||
                     ActivityCompat.checkSelfPermission(
-                        context!!,
+                        requireContext(),
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
@@ -160,7 +164,7 @@ class MainFragment : BaseFragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (
                     ActivityCompat.checkSelfPermission(
-                        context!!,
+                        requireContext(),
                         Manifest.permission.READ_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
@@ -187,22 +191,25 @@ class MainFragment : BaseFragment() {
             Constants.OPEN_CAMERA_PERMISSION ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     openCamera()
+
             Constants.OPEN_FILES_PERMISSION ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     openFiles()
+
             Constants.LOCATION_PERMISSION ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     findNavController().navigate(R.id.action_main_to_location)
         }
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun openCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { intent ->
-            intent.resolveActivity(context!!.packageManager)?.also {
-                file = Utils.createImageFile(context!!)
+            intent.resolveActivity(requireContext().packageManager)?.also {
+                file = Utils.createImageFile(requireContext())
                 file?.also {
                     val uri = FileProvider.getUriForFile(
-                        context!!,
+                        requireContext(),
                         "com.hyperether.pointsnaps.fileprovider",
                         it
                     )
@@ -225,9 +232,10 @@ class MainFragment : BaseFragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     viewModel.setFile(file)
                 }
+
             Constants.OPEN_FILES_REQUEST ->
                 if (resultCode == Activity.RESULT_OK) {
-                    file = Utils.getFileFromUri(data?.data!!, context!!)
+                    file = Utils.getFileFromUri(data?.data!!, requireContext())
                     viewModel.setFile(file)
                 }
         }
@@ -235,56 +243,83 @@ class MainFragment : BaseFragment() {
 
     fun buttonChecker() {
         if (!Utils.isNotFileEmpty(file)) {
-            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_camera_btn))
-            buttonTxt.text = getString(R.string.take_a_photo)
-            mainButton.setOnClickListener {
-                openFileChooser()
+            binding.apply {
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_camera_btn
+                    )
+                )
+                buttonTxt.text = getString(R.string.take_a_photo)
+                mainButton.setOnClickListener {
+                    openFileChooser()
+                }
             }
         } else if (location.address.isEmpty()) {
-            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_location_btn))
-            buttonTxt.text = getString(R.string.add_location)
-            mainButton.setOnClickListener {
-                findNavController().navigate(R.id.action_main_to_location)
+            binding.apply {
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_location_btn
+                    )
+                )
+                buttonTxt.text = getString(R.string.add_location)
+                mainButton.setOnClickListener {
+                    findNavController().navigate(R.id.action_main_to_location)
+                }
             }
         } else if (description.isEmpty()) {
-            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_description_btn))
-            buttonTxt.text = getString(R.string.add_description)
-            mainButton.setOnClickListener {
-                findNavController().navigate(R.id.action_main_to_description)
+            binding.apply {
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_description_btn
+                    )
+                )
+                buttonTxt.text = getString(R.string.add_description)
+                mainButton.setOnClickListener {
+                    findNavController().navigate(R.id.action_main_to_description)
+                }
             }
         } else {
-            buttonImage.setImageDrawable(getDrawable(context!!, R.drawable.ic_upload_btn))
-            buttonTxt.text = getString(R.string.upload)
-            mainButton.setOnClickListener {
-                if (PointSnapsSDK.isUserLoggedIn()) {
-                    progressBar.visibility = VISIBLE
-                    viewModel.upload(
-                        file,
-                        file.name,
-                        file.extension,
-                        location.address,
-                        location.lon,
-                        location.lat,
-                        description
-                    ) {
-                        progressBar.visibility = GONE
+            binding.apply {
+                buttonImage.setImageDrawable(
+                    getDrawable(
+                        requireContext(),
+                        R.drawable.ic_upload_btn
+                    )
+                )
+                buttonTxt.text = getString(R.string.upload)
+                mainButton.setOnClickListener {
+                    if (PointSnapsSDK.isUserLoggedIn()) {
+                        progressBar.visibility = VISIBLE
+                        viewModel.upload(
+                            file,
+                            file.name,
+                            file.extension,
+                            location.address,
+                            location.lon,
+                            location.lat,
+                            description
+                        ) {
+                            progressBar.visibility = GONE
+                        }
+                    } else {
+                        createToast(getString(R.string.must_login))
                     }
-                } else {
-                    createToast(getString(R.string.must_login))
                 }
             }
         }
-
     }
 
     private fun checkLocationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(
-                    context!!,
+                    requireContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_DENIED ||
                 ActivityCompat.checkSelfPermission(
-                    context!!,
+                    requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_DENIED
             ) {
@@ -303,40 +338,51 @@ class MainFragment : BaseFragment() {
     }
 
     private fun setToolBar() {
-        toolbar.menu.clear()
-        if (!PointSnapsSDK.isUserLoggedIn()) {
-            toolbar.inflateMenu(R.menu.login_menu)
-        } else {
-            toolbar.inflateMenu(R.menu.main_menu)
-        }
-
-        toolbar.setOnMenuItemClickListener {
-            if (it.itemId == R.id.login_menu_item) {
-                findNavController().navigate(R.id.goToAuthNav)
-                return@setOnMenuItemClickListener true
-            } else if (it.itemId == R.id.logout_menu_item) {
-                lifecycleScope.launch {
-                    val logout = viewModel.logout()
-                    if (logout) {
-                        createToast(getString(R.string.logout_toast))
-                    }
-                    setToolBar()
-                }
-                return@setOnMenuItemClickListener true
-            } else if (it.itemId == R.id.dark_menu_item) {
-                PointSnapsSDK.setDarkMode()
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_YES
-                )
-                return@setOnMenuItemClickListener true
-            } else if (it.itemId == R.id.light_menu_item) {
-                PointSnapsSDK.setLightMode()
-                AppCompatDelegate.setDefaultNightMode(
-                    AppCompatDelegate.MODE_NIGHT_NO
-                )
-                return@setOnMenuItemClickListener true
+        binding.apply {
+            toolbar.menu.clear()
+            if (!PointSnapsSDK.isUserLoggedIn()) {
+                toolbar.inflateMenu(R.menu.login_menu)
+            } else {
+                toolbar.inflateMenu(R.menu.main_menu)
             }
-            return@setOnMenuItemClickListener false
+
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.login_menu_item -> {
+                        findNavController().navigate(R.id.goToAuthNav)
+                        return@setOnMenuItemClickListener true
+                    }
+
+                    R.id.logout_menu_item -> {
+                        lifecycleScope.launch {
+                            val logout = viewModel.logout()
+                            if (logout) {
+                                createToast(getString(R.string.logout_toast))
+                            }
+                            setToolBar()
+                        }
+                        return@setOnMenuItemClickListener true
+                    }
+
+                    R.id.dark_menu_item -> {
+                        PointSnapsSDK.setDarkMode()
+                        AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_YES
+                        )
+                        return@setOnMenuItemClickListener true
+                    }
+
+                    R.id.light_menu_item -> {
+                        PointSnapsSDK.setLightMode()
+                        AppCompatDelegate.setDefaultNightMode(
+                            AppCompatDelegate.MODE_NIGHT_NO
+                        )
+                        return@setOnMenuItemClickListener true
+                    }
+
+                    else -> return@setOnMenuItemClickListener false
+                }
+            }
         }
     }
 }

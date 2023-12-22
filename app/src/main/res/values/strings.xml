@@ -32,4 +32,5 @@
     <string name="must_login">You must be logged in if you want to upload a image!</string>
     <string name="logout_toast">You have been logged out!</string>
     <string name="loc_not_set">Location is not set</string>
+
 </resources>

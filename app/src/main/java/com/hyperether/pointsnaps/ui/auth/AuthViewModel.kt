@@ -10,10 +10,9 @@ import kotlinx.coroutines.launch
 class AuthViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 
-    val user = MutableLiveData<User>()
+    val user = MutableLiveData<User?>()
     val error = MutableLiveData<String>()
     val registerUser = MutableLiveData<User>()
-
 
     fun loginUser(email: String, password: String, progressFinish: (Boolean?) -> Unit) {
         viewModelScope.launch {
@@ -35,9 +34,21 @@ class AuthViewModel : ViewModel() {
         finishProgress: (Boolean?) -> Unit
     ) {
         viewModelScope.launch {
-            val result = PointSnapsSDK.register(email, firstName, lastName, password, code)
+            val result = PointSnapsSDK.register(
+                email, firstName, lastName, password, code
+            )
             if (result.success) {
-                registerUser.postValue(User(firstName, lastName, password, email, false, false, ""))
+                registerUser.postValue(
+                    User(
+                        firstName = firstName,
+                        lastName = lastName,
+                        password = password,
+                        email = email,
+                        isCompany = false,
+                        isAdmin = false,
+                        token = ""
+                    )
+                )
             } else {
                 error.postValue(result.message)
             }

@@ -9,7 +9,7 @@ import android.widget.EditText
 import java.io.*
 
 
-class Utils() {
+class Utils {
     companion object {
 
         fun fieldEmptyValidator(arr:Array<EditText>):Boolean {
@@ -40,7 +40,7 @@ class Utils() {
 
         fun getFileFromUri(uri: Uri, context: Context): File {
             val file = createImageFile(context)
-            val inputStream: InputStream = context.getContentResolver().openInputStream(uri)!!
+            val inputStream: InputStream = context.contentResolver.openInputStream(uri)!!
             val bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
             val bos = ByteArrayOutputStream()
@@ -57,9 +57,5 @@ class Utils() {
         fun isNotFileEmpty(file: File): Boolean {
             return file.length() > 0
         }
-
     }
-
-
-
 }

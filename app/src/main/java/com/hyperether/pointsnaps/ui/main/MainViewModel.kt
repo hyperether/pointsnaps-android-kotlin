@@ -8,6 +8,7 @@ import com.hyperether.pointsnapssdk.PointSnapsSDK
 import kotlinx.coroutines.launch
 import java.io.File
 
+
 class MainViewModel : ViewModel() {
     var descriptionData = MutableLiveData<String>()
     var error = MutableLiveData<String>()
