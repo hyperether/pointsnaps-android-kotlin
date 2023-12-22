@@ -12,10 +12,10 @@ class PointSnapsApplication : Application() {
         PointSnapsSDK.build {
             context = applicationContext
         }
-        val mode = PointSnapsSDK.getMode()
-        when (mode) {
+        when (PointSnapsSDK.getMode()) {
             Constants.MODE_DARK ->
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
             Constants.MODE_LIGHT ->
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
